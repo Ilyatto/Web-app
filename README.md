@@ -79,14 +79,6 @@ python manage.py runserver
 | Менеджер | manager@ilyattopc.ru | Manager-2026 |
 | Покупатель | client@ilyattopc.ru | Client-2026 |
 
-### Перенос данных из прежней SQLite
-Если вы уже работали с версией на SQLite (`db.sqlite3`), перенесите пользователей, товары, сборки и заказы:
-```bash
-python manage.py migrate                       # таблицы в PostgreSQL
-python manage.py import_sqlite путь/к/db.sqlite3   # копирование с сохранением номеров заказов и дат
-```
-Если в PostgreSQL уже есть пользователи или заказы (например, после `demo`), добавьте `--replace` — они будут заменены данными из SQLite.
-
 ---
 
 ## 2. Рабочий запуск
