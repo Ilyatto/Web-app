@@ -1,0 +1,9 @@
+Django>=5.0,<6.0
+psycopg[binary]>=3.1
+redis>=5.0
+fakeredis>=2.20
+openpyxl>=3.1
+Pillow>=10.0
+whitenoise>=6.6
+waitress>=3.0
+gunicorn>=22; sys_platform != "win32"
