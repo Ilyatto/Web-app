@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-title">
+  <h1>Товары</h1>
+  <a class="btn" href="{% url 'staff_product_add' %}">Добавить товар</a>
+</div>
+
+<table class="table">
+  <tr>
+    <th>Название</th>
+    <th>Категория</th>
+    <th>Цена</th>
+    <th>Остаток</th>
+    <th></th>
+  </tr>
+  {% for product in products %}
+    <tr>
+      <td>{{ product.name }}</td>
+      <td>{{ product.get_category_display }}</td>
+      <td>{{ product.price }} ₽</td>
+      <td>{{ product.stock }} шт.</td>
+      <td class="actions">
+        <a class="btn btn-sm btn-white" href="{% url 'staff_product_edit' product.id %}">Изменить</a>
+        <a class="btn btn-sm btn-white" href="{% url 'staff_product_delete' product.id %}" onclick="return confirm('Удалить товар?')">Удалить</a>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

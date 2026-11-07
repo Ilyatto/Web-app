@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Каталог комплектующих</h1>
+
+<!-- кнопки категорий -->
+<div class="filters">
+  {% if category == "" %}
+    <a class="filter active" href="{% url 'catalog' %}">Все</a>
+  {% else %}
+    <a class="filter" href="{% url 'catalog' %}">Все</a>
+  {% endif %}
+  {% for cat in categories %}
+    {% if cat.0 == category %}
+      <a class="filter active" href="?cat={{ cat.0 }}">{{ cat.1 }}</a>
+    {% else %}
+      <a class="filter" href="?cat={{ cat.0 }}">{{ cat.1 }}</a>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% if query %}
+  <p class="gray">Результаты поиска: «{{ query }}»</p>
+{% endif %}
+
+<!-- список товаров -->
+<div class="products">
+  {% for product in products %}
+    <div class="product-card">
+      <span class="gray">{{ product.get_category_display }}</span>
+      <a class="product-name" href="{% url 'product' product.id %}">{{ product.name }}</a>
+      <span class="gray">{{ product.description }}</span>
+
+      <div class="product-bottom">
+        <b class="price">{{ product.price }} ₽</b>
+        {% if product.stock > 0 %}
+          <a class="btn btn-sm" href="{% url 'cart_add' product.id %}">В корзину</a>
+        {% else %}
+          <span class="gray">Нет в наличии</span>
+        {% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <p class="gray">Ничего не найдено</p>
+  {% endfor %}
+</div>
+{% endblock %}

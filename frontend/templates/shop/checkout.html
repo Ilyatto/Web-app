@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Оформление заказа</h1>
+
+<!-- слева форма, справа состав заказа -->
+<div class="two-columns">
+  <form method="post" class="panel form">
+    {% csrf_token %}
+    <p>
+      <label>Получатель</label>
+      <input type="text" name="name" value="{{ request.POST.name }}" required>
+    </p>
+    <p>
+      <label>Телефон</label>
+      <input type="text" name="phone" id="phone" value="{{ request.POST.phone }}" placeholder="+7 (___) ___-__-__" required>
+    </p>
+    <p>
+      <label>Адрес доставки</label>
+      <input type="text" name="address" value="{{ request.POST.address }}" required>
+    </p>
+    <p>
+      <label>Комментарий</label>
+      <textarea name="comment" rows="3">{{ request.POST.comment }}</textarea>
+    </p>
+    <button type="submit" class="btn">Подтвердить заказ</button>
+  </form>
+
+  <div class="panel">
+    <h2>Ваш заказ</h2>
+    {% for row in rows %}
+      <p class="order-line">
+        <span>{{ row.product.name }} × {{ row.qty }}</span>
+        <span>{{ row.sum }} ₽</span>
+      </p>
+    {% endfor %}
+    <p class="order-line"><b>Итого</b><b>{{ total }} ₽</b></p>
+  </div>
+</div>
+{% endblock %}

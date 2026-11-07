@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a class="back" href="{% url 'staff_orders' %}">← Все заказы</a>
+<h1>Заказ №{{ order.id }} <span class="status {{ order.status }}">{{ order.get_status_display }}</span></h1>
+
+<!-- у отменённого заказа статус менять нельзя -->
+{% if order.status != "cancel" %}
+  <form method="post" class="panel inline-form">
+    {% csrf_token %}
+    <label>Изменить статус:</label>
+    <select name="status">
+      {% for s in statuses %}
+        {% if s.0 == order.status %}
+          <option value="{{ s.0 }}" selected>{{ s.1 }}</option>
+        {% else %}
+          <option value="{{ s.0 }}">{{ s.1 }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-sm">Сохранить</button>
+  </form>
+{% endif %}
+
+<div class="two-columns">
+  <div class="panel">
+    <h2>Товары</h2>
+    {% for item in order.items.all %}
+      <p class="order-line">
+        <span>{{ item.name }} × {{ item.qty }}</span>
+        <span>{{ item.sum }} ₽</span>
+      </p>
+    {% endfor %}
+    <p class="order-line"><b>Итого</b><b>{{ order.total }} ₽</b></p>
+  </div>
+
+  <div class="panel">
+    <h2>Доставка</h2>
+    <p>{{ order.name }}<br>{{ order.phone }}<br>{{ order.address }}</p>
+    {% if order.comment %}
+      <p class="gray">Комментарий: {{ order.comment }}</p>
+    {% endif %}
+    <p class="gray">Оформлен {{ order.created_at|date:"d.m.Y H:i" }}</p>
+  </div>
+</div>
+{% endblock %}

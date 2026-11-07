@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-title">
+  <h1>Отчёт о продажах</h1>
+  <a class="btn" href="{% url 'staff_report_excel' %}?days={{ days }}">Скачать Excel</a>
+</div>
+
+<!-- выбор периода -->
+<div class="filters">
+  <a class="filter {% if days == 7 %}active{% endif %}" href="?days=7">Неделя</a>
+  <a class="filter {% if days == 30 %}active{% endif %}" href="?days=30">Месяц</a>
+  <a class="filter {% if days == 91 %}active{% endif %}" href="?days=91">Квартал</a>
+</div>
+<p class="gray">С {{ date_from|date:"d.m.Y" }} по сегодня, отменённые заказы не считаются</p>
+
+<!-- главные цифры -->
+<div class="report-boxes">
+  <div class="panel"><span class="gray">Заказов</span><b>{{ count }}</b></div>
+  <div class="panel"><span class="gray">Выручка</span><b>{{ revenue }} ₽</b></div>
+  <div class="panel"><span class="gray">Средний чек</span><b>{{ average }} ₽</b></div>
+</div>
+
+<h2>Популярные товары</h2>
+<table class="table">
+  <tr>
+    <th>Товар</th>
+    <th>Продано, шт.</th>
+  </tr>
+  {% for item in top %}
+    <tr>
+      <td>{{ item.0 }}</td>
+      <td>{{ item.1 }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="2" class="gray">За этот период продаж нет</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

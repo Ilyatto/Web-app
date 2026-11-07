@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a class="back" href="{% url 'catalog' %}">← Назад в каталог</a>
+
+<div class="panel product">
+  <h1>{{ product.name }}</h1>
+  <p class="gray">{{ product.get_category_display }}, производитель: {{ product.brand }}</p>
+  <p>{{ product.description }}</p>
+  {% if product.socket %}<p>Сокет: {{ product.socket }}</p>{% endif %}
+  {% if product.ram_type %}<p>Тип памяти: {{ product.ram_type }}</p>{% endif %}
+  {% if product.power %}<p>Мощность: {{ product.power }} Вт</p>{% endif %}
+  <p class="price big">{{ product.price }} ₽</p>
+
+  {% if product.stock > 0 %}
+    <p class="gray">В наличии: {{ product.stock }} шт.</p>
+    <a class="btn" href="{% url 'cart_add' product.id %}">Добавить в корзину</a>
+  {% else %}
+    <p class="gray">Нет в наличии</p>
+  {% endif %}
+</div>
+{% endblock %}

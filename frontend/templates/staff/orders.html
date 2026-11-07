@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Заказы</h1>
+
+<!-- фильтр по статусу -->
+<div class="filters">
+  {% if status == "" %}
+    <a class="filter active" href="{% url 'staff_orders' %}">Все</a>
+  {% else %}
+    <a class="filter" href="{% url 'staff_orders' %}">Все</a>
+  {% endif %}
+  {% for s in statuses %}
+    {% if s.0 == status %}
+      <a class="filter active" href="?status={{ s.0 }}">{{ s.1 }}</a>
+    {% else %}
+      <a class="filter" href="?status={{ s.0 }}">{{ s.1 }}</a>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<table class="table">
+  <tr>
+    <th>№</th>
+    <th>Дата</th>
+    <th>Покупатель</th>
+    <th>Телефон</th>
+    <th>Статус</th>
+    <th>Сумма</th>
+  </tr>
+  {% for order in orders %}
+    <tr>
+      <td><a href="{% url 'staff_order' order.id %}">№{{ order.id }}</a></td>
+      <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+      <td>{{ order.name }}</td>
+      <td>{{ order.phone }}</td>
+      <td><span class="status {{ order.status }}">{{ order.get_status_display }}</span></td>
+      <td>{{ order.total }} ₽</td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,27 @@
+# Запуск: docker compose up --build
+# Сайт откроется на http://127.0.0.1:8000/
+
+services:
+  # база данных PostgreSQL
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: pcshop
+      POSTGRES_USER: pcshop
+      POSTGRES_PASSWORD: "1234"   # такой же пароль, как в settings.py
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # сайт на Django
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
+    restart: on-failure   # если база ещё не запустилась, сайт перезапустится
+
+volumes:
+  pgdata:

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Конфигуратор ПК</h1>
+<p class="gray">Выберите детали и нажмите «Проверить совместимость»</p>
+
+<div class="two-columns">
+  <!-- слева выбор деталей -->
+  <form method="post" class="panel form">
+    {% csrf_token %}
+    {% for row in rows %}
+      <p>
+        <label>{{ row.title }}</label>
+        <select name="{{ row.code }}">
+          <option value="">не выбрано</option>
+          {% for product in row.products %}
+            {% if product.id == row.selected.id %}
+              <option value="{{ product.id }}" selected>{{ product.name }} – {{ product.price }} ₽</option>
+            {% else %}
+              <option value="{{ product.id }}">{{ product.name }} – {{ product.price }} ₽</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </p>
+    {% endfor %}
+
+    <button type="submit" name="action" value="check" class="btn btn-white">Проверить совместимость</button>
+    <button type="submit" name="action" value="cart" class="btn">Добавить в корзину</button>
+  </form>
+
+  <!-- справа результат проверки -->
+  <div class="panel">
+    <h2>Ваша сборка</h2>
+    {% for row in rows %}
+      {% if row.selected %}
+        <p class="order-line">
+          <span>{{ row.selected.name }}</span>
+          <span>{{ row.selected.price }} ₽</span>
+        </p>
+      {% endif %}
+    {% endfor %}
+    <p class="order-line"><b>Итого</b><b>{{ total }} ₽</b></p>
+
+    {% if checked %}
+      {% if errors %}
+        {% for error in errors %}
+          <p class="build-error">{{ error }}</p>
+        {% endfor %}
+      {% else %}
+        <p class="build-ok">✓ Все детали совместимы</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

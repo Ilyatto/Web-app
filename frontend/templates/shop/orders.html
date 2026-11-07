@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Мои заказы</h1>
+
+{% for order in orders %}
+  <div class="panel order">
+    <h2>Заказ №{{ order.id }} <span class="status {{ order.status }}">{{ order.get_status_display }}</span></h2>
+    <p class="gray">{{ order.created_at|date:"d.m.Y H:i" }}, {{ order.address }}</p>
+    {% for item in order.items.all %}
+      <p class="order-line">
+        <span>{{ item.name }} × {{ item.qty }}</span>
+        <span>{{ item.sum }} ₽</span>
+      </p>
+    {% endfor %}
+    <p class="order-line"><b>Итого</b><b>{{ order.total }} ₽</b></p>
+  </div>
+{% empty %}
+  <p class="gray">Заказов пока нет.</p>
+{% endfor %}
+{% endblock %}

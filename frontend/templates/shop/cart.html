@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Корзина</h1>
+
+{% if rows %}
+  <!-- таблица товаров в корзине -->
+  <table class="table">
+    <tr>
+      <th>Товар</th>
+      <th>Цена</th>
+      <th>Количество</th>
+      <th>Сумма</th>
+      <th></th>
+    </tr>
+    {% for row in rows %}
+      <tr>
+        <td>{{ row.product.name }}</td>
+        <td>{{ row.product.price }} ₽</td>
+        <td>
+          <form method="post" class="inline-form">
+            {% csrf_token %}
+            <input type="hidden" name="product" value="{{ row.product.id }}">
+            <input type="number" name="qty" value="{{ row.qty }}" min="1" class="qty">
+            <button type="submit" class="btn btn-sm btn-white">Обновить</button>
+          </form>
+        </td>
+        <td>{{ row.sum }} ₽</td>
+        <td><a class="btn btn-sm btn-white" href="{% url 'cart_remove' row.product.id %}">Удалить</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <!-- итоговая сумма -->
+  <div class="total">
+    Итого: <b>{{ total }} ₽</b>
+    <a class="btn" href="{% url 'checkout' %}">Оформить заказ</a>
+  </div>
+{% else %}
+  <p class="gray">Корзина пуста. <a href="{% url 'catalog' %}">Перейти в каталог</a></p>
+{% endif %}
+{% endblock %}
